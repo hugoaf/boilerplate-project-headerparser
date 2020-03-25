@@ -25,6 +25,29 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+/**
+ * API Project: Request Header Parser Microservice
+ * My Solution START
+ */
+
+app.get(
+  "/api/whoami/",
+  function(req, res, next) {
+    //console.log("******* start ********", req);
+    const ipaddress = req.headers["x-forwarded-for"].split(",")[1];
+    const language = req.headers["accept-language"].split(",")[0];
+    const software = req.headers["user-agent"];
+    req.myResponse = { ipaddress, language, software };
+    next();
+  },
+  function(req, res) {
+    res.json(req.myResponse);
+  }
+);
+/**
+ * Solution END
+ */
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
